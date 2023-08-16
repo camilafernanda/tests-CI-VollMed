@@ -13,6 +13,9 @@ import { Autenticaveis } from './auth/authEntity.js'
 dotenv.config({ path: '.env' })
 console.log("Arquivo do DataSource executado!")
 
+// username: 'root'
+// password: '12345'
+
 const AppDataSourceMysql = new DataSource({
   type: 'mysql',
   host: 'db',
