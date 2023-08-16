@@ -13,11 +13,23 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up TruffleHog
+    - name: Install TruffleHog
       run: |
-        docker pull trufflesecurity/trufflehog:latest
+        pip install trufflehog
 
     - name: Run TruffleHog
       run: |
-        docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/${{ github.repository }}
+        trufflehog https://github.com/${{ github.repository }}
+
+    # steps:
+    # - name: Checkout repository
+    #   uses: actions/checkout@v2
+
+    # - name: Set up TruffleHog
+    #   run: |
+    #     docker pull trufflesecurity/trufflehog:latest
+
+    # - name: Run TruffleHog
+    #   run: |
+    #     docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/${{ github.repository }}
 
