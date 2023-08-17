@@ -65,21 +65,29 @@ rotaPlanoDeSaude(app)
 app.use(errorMiddleware)
 
 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-app.listen(process.env.SERVER_PORT, () => { console.log(`server running on port ${process.env.SERVER_PORT}`) }
-)
+// app.listen(process.env.SERVER_PORT, () => { console.log(`server running on port ${process.env.SERVER_PORT}`) }
+// )
 
 export default app
 
+// Resolva os caminhos dos arquivos de certificado e chave privada
+const certPath = resolve(__dirname, '../ssl_certificate/certificado.pem');
+const keyPath = resolve(__dirname, '../ssl_certificate/chave-privada.pem');
+
 // Configuração para HTTPS com o certificado autoassinado
 const httpsOptions = {
-  key: fs.readFileSync('./chave-privada.pem'),
-  cert: fs.readFileSync('./certificado.pem')
+  key: fs.readFileSync(keyPath),
+  cert: fs.readFileSync(certPath)
 };
 
-// Crie o servidor HTTPS
 const httpsServer = https.createServer(httpsOptions, app);
 
-// Inicie o servidor HTTPS
-httpsServer.listen(process.env.SERVER_PORT, () => {
-  console.log(`Server running on HTTPS port ${process.env.SERVER_PORT}`);
+// Inicie o servidor HTTP primeiro
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`Server running on port ${process.env.SERVER_PORT}`);
+});
+
+// Inicie o servidor HTTPS depois
+httpsServer.listen(process.env.SERVER_PORT_HTTPS, () => {
+  console.log(`Server running on HTTPS port ${process.env.SERVER_PORT_HTTPS}`);
 });
