@@ -34,11 +34,11 @@ jobs:
       id: trufflehog
       run: |
         output=$(docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/${{ github.repository }})
-        echo "$output"
+        echo "::set-output name=trufflehog_output::$output"
 
     - name: Check TruffleHog output
       run: |
-        if [[ "${{ steps.trufflehog.outputs.stdout }}" == *"Found unverified result"* ]]; then
+        if [[ "${{ steps.trufflehog.outputs.trufflehog_output }}" == *"Found unverified result"* ]]; then
           echo "TruffleHog detected secrets. Failing the pipeline."
           exit 1
         fi
