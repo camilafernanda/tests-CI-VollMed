@@ -1,5 +1,5 @@
 export default async function faltamVariaveisDeAmbiente (): Promise<boolean> {
-  const variaveisObrigatorias = ['DB_TYPE', 'qualquercoisa', 'SECRET_KEY_CRYPTO', '12345', 'testemed']
+  const variaveisObrigatorias = ['DB_TYPE', 'SECRET_JWT', 'SECRET_KEY_CRYPTO', 'DB_PASSWORD', 'DB_DATABASE']
   const variaveisFaltantes = variaveisObrigatorias.filter((variavel) => process.env[variavel] == null)
 
   if (variaveisFaltantes.length > 0) {
