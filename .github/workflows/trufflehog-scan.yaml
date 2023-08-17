@@ -21,6 +21,7 @@ jobs:
     #   run: |
     #     trufflehog https://github.com/${{ github.repository }}
 
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -30,6 +31,14 @@ jobs:
         docker pull trufflesecurity/trufflehog:latest
 
     - name: Run TruffleHog
+      id: trufflehog
       run: |
-        docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/${{ github.repository }}
+        output=$(docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/${{ github.repository }})
+        echo "$output"
 
+    - name: Check TruffleHog output
+      run: |
+        if [[ ${{ steps.trufflehog.outputs.stdout }} == *"Found unverified result"* ]]; then
+          echo "TruffleHog detected secrets. Failing the pipeline."
+          exit 1
+        fi
