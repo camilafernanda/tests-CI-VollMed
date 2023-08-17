@@ -15,6 +15,8 @@ import rotaPaciente from './pacientes/pacienteRoutes.js'
 import rotaPlanoDeSaude from './planosDeSaude/planosDeSaudeRoutes.js'
 import faltamVariaveisDeAmbiente from './utils/serverUtils.js'
 import { resolve, dirname } from 'path'
+import https from 'https';
+import fs from 'fs';
 
 const __filename = import.meta.url.substring(7)
 const __dirname = dirname(__filename)
@@ -67,3 +69,17 @@ app.listen(process.env.SERVER_PORT, () => { console.log(`server running on port 
 )
 
 export default app
+
+// Configuração para HTTPS com o certificado autoassinado
+const httpsOptions = {
+  key: fs.readFileSync('./chave-privada.pem'),
+  cert: fs.readFileSync('./certificado.pem')
+};
+
+// Crie o servidor HTTPS
+const httpsServer = https.createServer(httpsOptions, app);
+
+// Inicie o servidor HTTPS
+httpsServer.listen(process.env.SERVER_PORT, () => {
+  console.log(`Server running on HTTPS port ${process.env.SERVER_PORT}`);
+});
