@@ -38,7 +38,7 @@ jobs:
 
     - name: Check TruffleHog output
       run: |
-        if [[ ${{ steps.trufflehog.outputs.stdout }} == *"Found unverified result"* ]]; then
+        if [[ "${{ steps.trufflehog.outputs.stdout }}" == *"Found unverified result"* ]]; then
           echo "TruffleHog detected secrets. Failing the pipeline."
           exit 1
         fi
