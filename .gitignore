@@ -6,4 +6,4 @@ temp/
 db_data/
 database/
 mysql
-ssl_certificate/
+ssl_certificate
