@@ -13,17 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Download and unzip SonarScanner
-        run: |
-          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-          unzip sonar-scanner-cli-5.0.1.3006-linux.zip
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11' 
 
       - name: Run SonarScanner
         run: |
-          ./sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner -X \
+          ./gradlew sonarqube \
             -Dsonar.projectKey=VollMed \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=http://localhost:9000 \
+            -Dsonar.host.url=$SONARQUBE_HOST \
             -Dsonar.login=$SONARQUBE_TOKEN
         env:
+          SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
           SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
