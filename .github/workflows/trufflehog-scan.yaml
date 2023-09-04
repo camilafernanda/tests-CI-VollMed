@@ -40,5 +40,11 @@ jobs:
       run: |
         if [[ "${{ steps.trufflehog.outputs.trufflehog_output }}" == *"Found unverified result"* ]]; then
           echo "TruffleHog detected secrets. Failing the pipeline."
+
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d '{"title": "Detected secrets by TruffleHog", "body": "TruffleHog detected secrets in the repository. Please investigate and take appropriate action."}' \
+            "https://api.github.com/repos/${{ github.repository }}/issues"
+
           exit 1
         fi

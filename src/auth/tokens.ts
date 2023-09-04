@@ -3,8 +3,11 @@ import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import moment from 'moment'
 import { AppError, Status } from '../error/ErrorHandler.js'
-
+import fs from 'fs';
 import ClienteRedis from '../services/redis/redisClient.js'
+
+// Resolva o caminho do arquivo de chave privada
+const privateKey = fs.readFileSync('../ssl_certificate/chave-privada.pem');
 
 const TEMPO_EXPIRACAO_ACCESS_TOKEN = [20, 'm']
 const TEMPO_EXPIRACAO_REFRESH_TOKEN = [5, 'd']
@@ -14,7 +17,8 @@ const blocklistAccessToken = new ClienteRedis('blocklist-access-token: ')
 
 function criaTokenJWT (id, role, [tempoQuantidade, tempoUnidade]: string[]): string {
   const payload = { id, role }
-  const token = jwt.sign(payload, 'qualquercoisa', {
+  const token = jwt.sign(payload, privateKey, {
+    algorithm: 'RS256',
     expiresIn: tempoQuantidade + tempoUnidade
   })
   return token
