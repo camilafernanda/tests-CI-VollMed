@@ -49,7 +49,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/camilafernanda/tests-CI-VollMed/issues \
-            -d '{\"title\":\"Found a secret\",\"body\":\"TruffleHog detected a secret:\\n$secret_info\",\"labels\":[\"bug\"]}'
+            -d "{\"title\":\"Found a secret\",\"body\":\"TruffleHog detected a secret:\\n$secret_info\",\"labels\":[\"bug\"]}"
 
           exit 1
         fi
