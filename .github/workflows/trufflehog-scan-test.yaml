@@ -26,7 +26,7 @@ jobs:
     - name: Check TruffleHog output
       run: |
         trufflehog_output="${{ steps.trufflehog.outputs.trufflehog_output }}"
-        if [[ "$trufflehog_output" == *"Found unverified result"* || "$trufflehog_output" == *"Found verified result"* ]]; then
+        if [[ "$trufflehog_output" == *"Found unverified result 🐷🔑❓"* || "$trufflehog_output" == *"Found verified result 🐷🔑❓"* ]]; then
           echo "TruffleHog detected secrets. Failing the pipeline."
           
           secret_type=$(echo "$trufflehog_output" | grep -oP '(?<=Detector Type: ).*')
