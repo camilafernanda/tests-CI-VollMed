@@ -11,7 +11,6 @@ import { Consulta } from './consultas/consultaEntity.js'
 import { Autenticaveis } from './auth/authEntity.js'
 
 dotenv.config({ path: '.env' })
-console.log("Arquivo do DataSource executado!")
 
 const AppDataSourceMysql = new DataSource({
   type: 'mysql',
