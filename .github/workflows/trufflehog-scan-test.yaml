@@ -43,7 +43,6 @@ jobs:
       issue_body+="Line: $line\n"
       issue_body+="Link: $link\n"
 
-      
       curl -L \
         -X POST \
         -H "Accept: application/vnd.github+json" \
