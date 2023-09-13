@@ -37,9 +37,8 @@ jobs:
           line=$(echo "$trufflehog_output" | grep -oP '(?<=Line: ).*')
           link=$(echo "$trufflehog_output" | grep -oP '(?<=Link: ).*')
           repo=$(echo "$trufflehog_output" | grep -oP '(?<=Repository: ).*')
-          timestamp=$(echo "$trufflehog_output" | grep -oP '(?<=Timestamp: ).*')
 
-          issue_body="Secrets encontradas pelo TruffleHog, com as seguintes informações:\n\nCommit: $info\nEmail: $email\nFile: $file\nLine: $line\nLink: $link\nRepository: $repo\nTimestamp: $timestamp"
+          issue_body="Secrets encontradas pelo TruffleHog, com as seguintes informações:\n\nCommit: $info\nEmail: $email\nFile: $file\nLine: $line\nLink: $link\nRepository: $repo"
 
           curl -L \
             -X POST \
