@@ -33,11 +33,11 @@ jobs:
 
               
           secret_type=$(echo "$trufflehog_output" | grep -oP '(?<=Detector Type: ).*')
-          commit=$(echo "$trufflehog_output" | grep -oP '(?<=Commit: ).*')
-          email=$(echo "$trufflehog_output" | grep -oP '(?<=Email: ).*')
-          file=$(echo "$trufflehog_output" | grep -oP '(?<=File: ).*')
-          line=$(echo "$trufflehog_output" | grep -oP '(?<=Line: ).*')
-          link=$(echo "$trufflehog_output" | grep -oP '(?<=Link: ).*')
+          commit=$(echo "$trufflehog_output" | grep -oP 'Commit: (.*)')
+          email=$(echo "$trufflehog_output" | grep -oP 'Email: (.*)')
+          file=$(echo "$trufflehog_output" | grep -oP 'File: (.*)')
+          line=$(echo "$trufflehog_output" | grep -oP 'Line: (.*)')
+          link=$(echo "$trufflehog_output" | grep -oP 'Link: (.*)')
         
           issue_body="TruffleHog detected a secret of type: $secret_type\n"
           issue_body+="Commit: $commit\n"
