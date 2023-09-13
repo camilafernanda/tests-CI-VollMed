@@ -31,10 +31,9 @@ jobs:
           links=""
           links=$(echo "$trufflehog_output" | awk '/Link:/{print $2}')
 
-          if [ -n "$links" ]; then
-            links_formatted=$(echo -e "$links" | awk '{print "Link:"$0}')         
-            issue_body="Secrets encontradas pelo TruffleHog, nos seguintes arquivos:\n$links_formatted"
-          fi
+          
+          links_formatted=$(echo -e "$links" | awk '{print "Link:"$0}')         
+          
           
           issue_body="Secrets encontradas pelo TruffleHog, no seguinte arquivo:\n $links_formatted"
 
