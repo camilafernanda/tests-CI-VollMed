@@ -21,7 +21,7 @@ jobs:
       id: trufflehog
       run: |
         output=$(docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/${{ github.repository }} --exclude-paths=/pwd/trufflehog-exclude-path.txt)
-        echo "::set-output name=trufflehog_output::$output"
+        echo "::set-output name=trufflehog_output::${output}"
 
     - name: Check TruffleHog output
       run: |
@@ -29,7 +29,7 @@ jobs:
         if [[ "$trufflehog_output" == *"Found unverified result 🐷🔑❓"* || "$trufflehog_output" == *"Found verified result 🐷🔑❓"* ]]; then
           
           info=$(echo "$trufflehog_output" | grep -oP '(?<=Commit: ).*')
-          issue_body="Secrets encontradas pelo TruffleHog, com as seguintes informações:\n $info"
+          issue_body="Secrets encontradas pelo TruffleHog, com as seguintes informações:\n\n$info"
 
           curl -L \
             -X POST \
