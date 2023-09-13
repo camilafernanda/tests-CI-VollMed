@@ -54,4 +54,3 @@ jobs:
           exit 1
         env:
           trufflehog_output: ${{ steps.trufflehog.outputs.trufflehog_output }}
-
