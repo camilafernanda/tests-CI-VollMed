@@ -29,13 +29,18 @@ jobs:
         if [[ "$trufflehog_output" == *"Found unverified result 🐷🔑❓"* || "$trufflehog_output" == *"Found verified result 🐷🔑❓"* ]]; then
           
           links=""
-          links=$(echo "$trufflehog_output" | awk '/Link:/{print $2}')
 
+          while IFS= read -r line; do
+            links=$(echo "$trufflehog_output" | awk '/Link:/{print $2}')
+            
+            if [ -n "$link" ]; then
+              links="${links}$link\n"
+            fi
+          done <<< "$trufflehog_output"
           
-          links_formatted=$(echo -e "$links" | awk '{print "Link:"$0}')         
-          
-          
-          issue_body="Secrets encontradas pelo TruffleHog, no seguinte arquivo:\n $links_formatted"
+          echo "TruffleHog detected secrets"
+          # link=$(echo "$trufflehog_output" | grep -oP 'Link: (.*)')
+          issue_body="Secrets encontradas pelo TruffleHog, no seguinte arquivo:\n $links"
 
           curl -L \
             -X POST \
