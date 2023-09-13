@@ -4,7 +4,7 @@ repos:
     - id: trufflehog
       name: TruffleHog
       description: Detect secrets in your data.
-      entry: bash -c 'docker run --rm -v "$(pwd):/workdir" --rm trufflesecurity/trufflehog:latest git file:///workdir --since-commit HEAD --only-verified --fail'
+      entry: bash -c 'docker run --rm -v "$(pwd):/workdir" --rm trufflesecurity/trufflehog:latest git file:///workdir --since-commit HEAD --only-verified --fail 1>&1'
       # entry: bash -c 'output=$(docker run -v "$(pwd):/workdir" --rm us-docker.pkg.dev/thog-artifacts/public/scanner:latest git main HEAD /workdir); if [[ ! -z $output ]]; then echo "$output"; fi'
       # entry: bash -c 'output=$(docker run -v "$(pwd):/workdir" --rm us-docker.pkg.dev/thog-artifacts/public/scanner:latest git main HEAD /workdir); if [[ ! -z $output ]]; then echo "$output" && exit 1; fi'
       language: system
