@@ -27,9 +27,20 @@ jobs:
       run: |
         echo "$trufflehog_output"
         if [[ "$trufflehog_output" == *"Found unverified result 🐷🔑❓"* || "$trufflehog_output" == *"Found verified result 🐷🔑❓"* ]]; then
+          
+          links=""
+          while IFS= read -r line; do
+            link=$(echo "$line" | grep -oP 'Link: (.*)')
+            
+            if [ -n "$link" ]; then
+              links="${links}$link\n"
+            fi
+          done <<< "$trufflehog_output"
+          links=$(echo -e "$links" | tr -d '[:space:]')
+          
           echo "TruffleHog detected secrets"
-          link=$(echo "$trufflehog_output" | grep -oP 'Link: (.*)')
-          issue_body="Secrets encontradas pelo TruffleHog, no seguinte arquivo:\n $link"
+          # link=$(echo "$trufflehog_output" | grep -oP 'Link: (.*)')
+          issue_body="Secrets encontradas pelo TruffleHog, no seguinte arquivo:\n $links"
 
           curl -L \
             -X POST \
