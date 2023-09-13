@@ -21,25 +21,15 @@ jobs:
       id: trufflehog
       run: |
         output=$(docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/${{ github.repository }} --exclude-paths=/pwd/trufflehog-exclude-path.txt)
-        # echo "::set-output name=trufflehog_output::$(echo "$output" | tr -d '\r\n')"
-        echo "::set-output name=trufflehog_output::${output}"
+        echo "::set-output name=trufflehog_output::$(echo "$output" | tr -d '\r')"
 
     - name: Check TruffleHog output
       run: |
         echo "$trufflehog_output"
         if [[ "$trufflehog_output" == *"Found unverified result 🐷🔑❓"* || "$trufflehog_output" == *"Found verified result 🐷🔑❓"* ]]; then
           
-          # info=$(echo "$trufflehog_output" | grep -oP '(?<=Commit: ).*')
-          # issue_body="Secrets encontradas pelo TruffleHog, com as seguintes informações:\n $info"
-
           info=$(echo "$trufflehog_output" | grep -oP '(?<=Commit: ).*')
-          email=$(echo "$trufflehog_output" | grep -oP '(?<=Email: ).*')
-          file=$(echo "$trufflehog_output" | grep -oP '(?<=File: ).*')
-          line=$(echo "$trufflehog_output" | grep -oP '(?<=Line: ).*')
-          link=$(echo "$trufflehog_output" | grep -oP '(?<=Link: ).*')
-          repo=$(echo "$trufflehog_output" | grep -oP '(?<=Repository: ).*')
-
-          issue_body="Secrets encontradas pelo TruffleHog, com as seguintes informações:\n\nCommit: $info\nEmail: $email\nFile: $file\nLine: $line\nLink: $link\nRepository: $repo"
+          issue_body="Secrets encontradas pelo TruffleHog, com as seguintes informações:\n\n$info"
 
           curl -L \
             -X POST \
