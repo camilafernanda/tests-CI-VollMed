@@ -21,7 +21,7 @@ jobs:
       id: trufflehog
       run: |
         output=$(docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/${{ github.repository }} --exclude-paths=/pwd/trufflehog-exclude-path.txt)
-        echo "::set-output name=trufflehog_output::$(echo "$output")"
+        echo "::set-output name=trufflehog_output::$(echo "$output" | tr -d '\r\n')"
 
     - name: Check TruffleHog output
       run: |
