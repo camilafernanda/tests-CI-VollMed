@@ -29,16 +29,9 @@ jobs:
         if [[ "$trufflehog_output" == *"Found unverified result 🐷🔑❓"* || "$trufflehog_output" == *"Found verified result 🐷🔑❓"* ]]; then
           
           links=""
+          links=$(echo "$trufflehog_output" | awk '/Link:/{print $2}')
 
-          while IFS= read -r line; do
-            links=$(echo "$trufflehog_output" | awk '/Link:/{print $2}')
-            
-            if [ -n "$link" ]; then
-              links="${links}$link\n"
-            fi
-          done <<< "$trufflehog_output"
           
-          echo "TruffleHog detected secrets"
           # link=$(echo "$trufflehog_output" | grep -oP 'Link: (.*)')
           issue_body="Secrets encontradas pelo TruffleHog, no seguinte arquivo:\n $links"
 
