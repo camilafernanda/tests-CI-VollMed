@@ -25,6 +25,7 @@ jobs:
 
     - name: Check TruffleHog output
       run: |
+        echo "$trufflehog_output"
         if [[ "$trufflehog_output" == *"Found unverified result 🐷🔑❓"* || "$trufflehog_output" == *"Found verified result 🐷🔑❓"* ]]; then
           echo "TruffleHog detected secrets. Failing the pipeline."
           commit=$(echo "$trufflehog_output" | grep -oP '(?<=Commit: ).*')
