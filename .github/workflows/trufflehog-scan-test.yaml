@@ -25,30 +25,28 @@ jobs:
 
     - name: Check TruffleHog output
       run: |
-        while IFS= read -r line; do
-          if [[ "$line" == *"Found unverified result 🐷🔑❓"* || "$line" == *"Found verified result 🐷🔑❓"* ]]; then
-            commit=$(echo "$line" | grep -oP 'Commit: (.*)')
-            email=$(echo "$line" | grep -oP 'Email: (.*)')
-            file=$(echo "$line" | grep -oP 'File: (.*)')
-            line_number=$(echo "$line" | grep -oP 'Line: (.*)')
-            link=$(echo "$line" | grep -oP 'Link: (.*)')
+        if [[ "$trufflehog_output" == *"Found unverified result 🐷🔑❓"* || "$trufflehog_output" == *"Found verified result 🐷🔑❓"* ]]; then
+          commit=$(echo "$line" | grep -oP 'Commit: (.*)')
+          email=$(echo "$line" | grep -oP 'Email: (.*)')
+          file=$(echo "$line" | grep -oP 'File: (.*)')
+          line_number=$(echo "$line" | grep -oP 'Line: (.*)')
+          link=$(echo "$line" | grep -oP 'Link: (.*)')
 
-            issue_body="TruffleHog detected a secret \n"
-            issue_body+="Commit: $commit \n"
-            issue_body+="Email: $email \n"
-            issue_body+="File: $file \n"
-            issue_body+="Line: $line_number \n"
-            issue_body+="Link: $link \n"
+          issue_body="TruffleHog detected a secret \n
+            Commit: $commit \n
+            Email: $email \n
+            File: $file \n
+            Line: $line_number \n
+            Link: $link \n"
 
-            curl -L \
-              -X POST \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              "https://api.github.com/repos/camilafernanda/tests-CI-VollMed/issues" \
-              -d "{\"title\":\"Found a secret\",\"body\":\"$issue_body\",\"labels\":[\"bug\"]}"
-          fi
-        done <<< "$trufflehog_output"
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/camilafernanda/tests-CI-VollMed/issues" \
+            -d "{\"title\":\"Found a secret\",\"body\":\"$issue_body\",\"labels\":[\"bug\"]}"
+        fi
         exit 1
       env:
         trufflehog_output: ${{ steps.trufflehog.outputs.trufflehog_output }}
