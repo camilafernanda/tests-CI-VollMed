@@ -25,11 +25,10 @@ jobs:
 
     - name: Check TruffleHog output
       run: |
-        trufflehog_output="${{ steps.trufflehog.outputs.trufflehog_output }}"
-        if [[ "$trufflehog_output" == *"Found unverified result"* || "$trufflehog_output" == *"Found verified result"* ]]; then
-           echo "TruffleHog detected secrets. Failing the pipeline."
-            commit=$(echo "${{ steps.trufflehog.outputs.trufflehog_output }}" | grep -oP '(?<=Commit: ).*')
-            issue_body="Secrets encontradas pelo TruffleHog, cheque o commit $commit"
+        if [[ "$trufflehog_output" == *"Found unverified result 🐷🔑❓"* || "$trufflehog_output" == *"Found verified result 🐷🔑❓"* ]]; then
+          echo "TruffleHog detected secrets. Failing the pipeline."
+          commit=$(echo "$trufflehog_output" | grep -oP '(?<=Commit: ).*')
+          issue_body="Secrets encontradas pelo TruffleHog, cheque o commit $commit"
 
           curl -L \
             -X POST \
@@ -40,3 +39,5 @@ jobs:
             -d "{\"title\":\"Found a secret\",\"body\":\"$issue_body\",\"labels\":[\"bug\"]}" \
           exit 1
         fi
+      env:
+        trufflehog_output: ${{ steps.trufflehog.outputs.trufflehog_output }}
