@@ -25,22 +25,20 @@ jobs:
 
     - name: Check TruffleHog output
       run: |
-        echo "$trufflehog_output"
         while IFS= read -r line; do
           if [[ "$line" == *"Found unverified result 🐷🔑❓"* || "$line" == *"Found verified result 🐷🔑❓"* ]]; then
-            secret_type=$(echo "$line" | grep -oP '(?<=Detector Type: ).*')
             commit=$(echo "$line" | grep -oP 'Commit: (.*)')
             email=$(echo "$line" | grep -oP 'Email: (.*)')
             file=$(echo "$line" | grep -oP 'File: (.*)')
             line_number=$(echo "$line" | grep -oP 'Line: (.*)')
             link=$(echo "$line" | grep -oP 'Link: (.*)')
 
-            issue_body="TruffleHog detected a secret of type: $secret_type\n"
-            issue_body+="Commit: $commit\n"
-            issue_body+="Email: $email\n"
-            issue_body+="File: $file\n"
-            issue_body+="Line: $line_number\n"
-            issue_body+="Link: $link\n"
+            issue_body="TruffleHog detected a secret \n"
+            issue_body+="Commit: $commit \n"
+            issue_body+="Email: $email \n"
+            issue_body+="File: $file \n"
+            issue_body+="Line: $line_number \n"
+            issue_body+="Link: $link \n"
 
             curl -L \
               -X POST \
