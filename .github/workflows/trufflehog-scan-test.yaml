@@ -33,12 +33,7 @@ jobs:
             line_number=$(echo "$line" | grep -oP 'Line: (.*)')
             link=$(echo "$line" | grep -oP 'Link: (.*)')
 
-            issue_body="TruffleHog detected a secret \n
-              Commit: $commit \n
-              Email: $email \n
-              File: $file \n
-              Line: $line_number \n
-              Link: $link \n"
+            issue_body="TruffleHog detected a secret \n Commit: $commit \n Email: $email \n File: $file \n Line: $line_number \n Link: $link \n"
 
             curl -L \
               -X POST \
