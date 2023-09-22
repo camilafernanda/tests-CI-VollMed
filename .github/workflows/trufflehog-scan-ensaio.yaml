@@ -1,0 +1,22 @@
+name: TruflleHog Scan Ensaio
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  trufflehog:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up TruffleHog
+      run: |
+        docker pull trufflesecurity/trufflehog:latest
+
+    - name: Run TruffeHog
+      run: |
+        docker run --rm -v $PWD:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/camilafernanda/tests-CI-VollMed --exclude-paths=/pwd/trufflehog-exclude-path.txt
